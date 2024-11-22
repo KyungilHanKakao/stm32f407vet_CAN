@@ -56,16 +56,16 @@ void MX_CAN1_Init(void)
   }
   /* USER CODE BEGIN CAN1_Init 2 */
   	  CAN_FilterTypeDef  sFilterConfig;
-  	  sFilterConfig.FilterBank = 0;
+  	  sFilterConfig.FilterBank=0;
       sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
       sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-      sFilterConfig.FilterIdHigh = 0x0000; //(0x30 << 5);               // Base ID for range (0x30 shifted left by 5)
-      sFilterConfig.FilterIdLow = 0x0000;
-      sFilterConfig.FilterMaskIdHigh =  0x0000; //(0xF8 << 5);
-      sFilterConfig.FilterMaskIdLow = 0x0000;
+      sFilterConfig.FilterIdHigh = (0x34 << 5);
+
+      sFilterConfig.FilterMaskIdHigh = (0xF8 << 5);
+
       sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
       sFilterConfig.FilterActivation = ENABLE;
-      sFilterConfig.FilterBank=10;
+
       sFilterConfig.SlaveStartFilterBank = 14;
 
 
@@ -79,7 +79,7 @@ void MX_CAN1_Init(void)
 
 
     // Activate notification for RX FIFO pending interrupt
-    HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING);
+    HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
 
 
     // Start the CAN peripheral
@@ -118,7 +118,7 @@ void MX_CAN2_Init(void)
   }
   /* USER CODE BEGIN CAN2_Init 2 */
   CAN_FilterTypeDef  sFilterConfig;
-	sFilterConfig.FilterBank = 0;
+
 	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
 	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
 	sFilterConfig.FilterIdHigh = 0x0000; //(0x30 << 5);               // Base ID for range (0x30 shifted left by 5)
@@ -140,7 +140,7 @@ void MX_CAN2_Init(void)
 
 
 	// Activate notification for RX FIFO pending interrupt
-	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING);
+	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
 
 
 	// Start the CAN peripheral

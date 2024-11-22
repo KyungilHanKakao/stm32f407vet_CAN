@@ -201,7 +201,7 @@ void StartTask02(void *argument)
 		  HAL_CAN_AddTxMessage(&hcan1, &tx_header, tx_data, &tx_mailbox_number);
 
 
-		  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+		  //HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 		  osDelay(1000);
 	  }
   /* USER CODE END StartTask02 */
@@ -247,11 +247,14 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
 
 	HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &rx_header, rx_data);
 
-	if (rx_header.StdId == 0x34) {
-		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-	}
-
-
+	HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+//	if (rx_header.StdId == 0x34) {
+//		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+//	}
+//
+//	if (rx_header.StdId == 0x43) {
+//			HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+//	}
 
 }
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
@@ -262,10 +265,13 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
 
 	HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO1, &rx_header, rx_data);
 
-	if (rx_header.StdId == 0x43) {
-		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+	if (rx_header.StdId == 0x34) {
+		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 	}
 
+	if (rx_header.StdId == 0x43) {
+		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+	}
 
 }
 /* USER CODE END Application */
