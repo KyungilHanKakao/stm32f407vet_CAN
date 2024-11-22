@@ -69,7 +69,7 @@ void MX_CAN1_Init(void)
       sFilterConfig.SlaveStartFilterBank = 14;
 
 
-      // CAN2Ïùò FilterBankÏãúÏûë ÏúÑÏπò, CAN2Î•º ÏÇ¨Ïö©ÌïúÎã§Î©¥ FilterBankÎ•º SlaveStartFilterBankÎ≥¥Îã§ ÌÅ¨Í≤å ÏÑ§Ï†ïÌï¥Ïïº Ìï®.
+      // CAN2?ùò FilterBank?ãú?ûë ?úÑÏπ?, CAN2Î•? ?Ç¨?ö©?ïú?ã§Î©? FilterBankÎ•? SlaveStartFilterBankÎ≥¥Îã§ ?Å¨Í≤? ?Ñ§?†ï?ï¥?ïº ?ï®.
 
       if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
       {
@@ -130,7 +130,7 @@ void MX_CAN2_Init(void)
 	sFilterConfig.FilterBank=15;
 
 
-	// CAN2Ïùò FilterBankÏãúÏûë ÏúÑÏπò, CAN2Î•º ÏÇ¨Ïö©ÌïúÎã§Î©¥ FilterBankÎ•º SlaveStartFilterBankÎ≥¥Îã§ ÌÅ¨Í≤å ÏÑ§Ï†ïÌï¥Ïïº Ìï®.
+	// CAN2?ùò FilterBank?ãú?ûë ?úÑÏπ?, CAN2Î•? ?Ç¨?ö©?ïú?ã§Î©? FilterBankÎ•? SlaveStartFilterBankÎ≥¥Îã§ ?Å¨Í≤? ?Ñ§?†ï?ï¥?ïº ?ï®.
 
 	if (HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig) != HAL_OK)
 	{
@@ -187,8 +187,6 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
     HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
     HAL_NVIC_SetPriority(CAN1_RX1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(CAN1_RX1_IRQn);
-    HAL_NVIC_SetPriority(CAN1_SCE_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(CAN1_SCE_IRQn);
   /* USER CODE BEGIN CAN1_MspInit 1 */
 
   /* USER CODE END CAN1_MspInit 1 */
@@ -224,8 +222,6 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
     HAL_NVIC_EnableIRQ(CAN2_RX0_IRQn);
     HAL_NVIC_SetPriority(CAN2_RX1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(CAN2_RX1_IRQn);
-    HAL_NVIC_SetPriority(CAN2_SCE_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(CAN2_SCE_IRQn);
   /* USER CODE BEGIN CAN2_MspInit 1 */
 
   /* USER CODE END CAN2_MspInit 1 */
@@ -256,7 +252,6 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
     HAL_NVIC_DisableIRQ(CAN1_TX_IRQn);
     HAL_NVIC_DisableIRQ(CAN1_RX0_IRQn);
     HAL_NVIC_DisableIRQ(CAN1_RX1_IRQn);
-    HAL_NVIC_DisableIRQ(CAN1_SCE_IRQn);
   /* USER CODE BEGIN CAN1_MspDeInit 1 */
 
   /* USER CODE END CAN1_MspDeInit 1 */
@@ -283,7 +278,6 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
     HAL_NVIC_DisableIRQ(CAN2_TX_IRQn);
     HAL_NVIC_DisableIRQ(CAN2_RX0_IRQn);
     HAL_NVIC_DisableIRQ(CAN2_RX1_IRQn);
-    HAL_NVIC_DisableIRQ(CAN2_SCE_IRQn);
   /* USER CODE BEGIN CAN2_MspDeInit 1 */
 
   /* USER CODE END CAN2_MspDeInit 1 */

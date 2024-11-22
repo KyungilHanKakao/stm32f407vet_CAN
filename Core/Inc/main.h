@@ -121,10 +121,6 @@ void Error_Handler(void);
 #define P5_GPIOD14_GPIO_Port GPIOD
 #define P5_GPIOD15_Pin GPIO_PIN_15
 #define P5_GPIOD15_GPIO_Port GPIOD
-#define P5_GPIOC6_Pin GPIO_PIN_6
-#define P5_GPIOC6_GPIO_Port GPIOC
-#define P5_GPIOC7_Pin GPIO_PIN_7
-#define P5_GPIOC7_GPIO_Port GPIOC
 #define P5_GPIOA8_Pin GPIO_PIN_8
 #define P5_GPIOA8_GPIO_Port GPIOA
 #define SDIO_CD_Pin GPIO_PIN_3

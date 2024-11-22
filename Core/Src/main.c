@@ -23,6 +23,7 @@
 #include "crc.h"
 #include "dma.h"
 #include "fatfs.h"
+#include "i2c.h"
 #include "lwip.h"
 #include "rtc.h"
 #include "sdio.h"
@@ -49,7 +50,7 @@
 #endif
 
 PUTCHAR_PROTOTYPE {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart6, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
     return ch;
 }
 /* USER CODE END PD */
@@ -116,12 +117,11 @@ int main(void)
   MX_FATFS_Init();
   MX_CRC_Init();
   MX_SPI2_Init();
+  MX_I2C1_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-
-  /* Init scheduler */
-  osKernelInitialize();
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
