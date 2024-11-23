@@ -37,7 +37,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define SERVER_IP   "192.168.0.27"  // Replace with your server's IP address
+#define SERVER_IP   "192.168.55.146"  // Replace with your server's IP address
 #define SERVER_PORT 6000             // Replace with your server's port
 /* USER CODE END PTD */
 
@@ -70,7 +70,7 @@ void tcp_client_task(void *arg) {
 	char buffer[1024];
 	int bytes_received;
 
-	printf("after\n");
+
 	// Create socket
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock < 0) {
@@ -95,7 +95,7 @@ void tcp_client_task(void *arg) {
 	//inet_aton(SERVER_IP, &server_addr.sin_addr);
 
 
-
+	printf("after\n");
 	// Connect to server
 	if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
 		printf("Failed to connect to server : %d\n", errno);
@@ -215,7 +215,8 @@ void StartDefaultTask(void const * argument)
   /* USER CODE BEGIN StartDefaultTask */
 
   printf("before\n");
-  //tcp_client_task((void*)argument);
+  osDelay(3000);
+  tcp_client_task((void*)argument);
 
   	  /* Infinite loop */
   for(;;)
@@ -251,12 +252,10 @@ void StartTask02(void const * argument)
 	  /* Infinite loop */
 	  for(;;)
 	  {
-		  //printf("send %d\n", tx_data[0]);
 		  tx_data[0] = !tx_data[0];
-
 		  HAL_CAN_AddTxMessage(&hcan1, &tx_header, tx_data, &tx_mailbox_number);
 
-
+		  //printf("send %d\n", tx_data[0]);
 		  //HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 		  osDelay(1000);
 	  }
@@ -325,7 +324,8 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
 		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 	}
 
-	if (rx_header.StdId == 0x43) {
+	if (rx_header.StdId == 0x55) {
+		//mprintf("recevied 0x55\n");
 		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
 	}
 

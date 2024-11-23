@@ -69,7 +69,7 @@ void MX_CAN1_Init(void)
       sFilterConfig.SlaveStartFilterBank = 14;
 
 
-      // CAN2?�� FilterBank?��?�� ?���?, CAN2�? ?��?��?��?���? FilterBank�? SlaveStartFilterBank보다 ?���? ?��?��?��?�� ?��.
+
 
       if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
       {
@@ -98,7 +98,7 @@ void MX_CAN2_Init(void)
   /* USER CODE END CAN2_Init 0 */
 
   /* USER CODE BEGIN CAN2_Init 1 */
-
+	// CAN2?�� FilterBank?��?�� ?���?, CAN2�? ?��?��?��?���? FilterBank�? SlaveStartFilterBank보다 ?���? ?��?��?��?�� ?��.
   /* USER CODE END CAN2_Init 1 */
   hcan2.Instance = CAN2;
   hcan2.Init.Prescaler = 6;
@@ -130,7 +130,7 @@ void MX_CAN2_Init(void)
 	sFilterConfig.FilterBank=15;
 
 
-	// CAN2?�� FilterBank?��?�� ?���?, CAN2�? ?��?��?��?���? FilterBank�? SlaveStartFilterBank보다 ?���? ?��?��?��?�� ?��.
+
 
 	if (HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig) != HAL_OK)
 	{
