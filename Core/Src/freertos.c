@@ -214,79 +214,8 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
 
-  osDelay(5000);
   printf("before\n");
   //tcp_client_task((void*)argument);
-
-  int sock;
-  	struct sockaddr_in server_addr;
-  	char message[] = "Hello from STM32";
-  	char buffer[1024];
-  	int bytes_received;
-
-  	printf("after\n");
-  	// Create socket
-  	sock = socket(AF_INET, SOCK_STREAM, 0);
-  	if (sock < 0) {
-  		printf("Failed to create socket\n");
-  		vTaskDelete(NULL);
-  		return;
-  	}
-
-  	// Set up the server address structure
-  	memset(&server_addr, 0, sizeof(server_addr));
-  	server_addr.sin_family = AF_INET;
-  	server_addr.sin_port = htons(SERVER_PORT);
-  	if (!inet_aton(SERVER_IP, &server_addr.sin_addr)) {
-  			printf("Invalid IP address\n");
-  			lwip_close(sock);
-  			return;
-  		}
-
-  	// Set up server address
-  	//server_addr.sin_family = AF_INET;
-  	//server_addr.sin_port = 6000;//htons(SERVER_PORT);
-  	//inet_aton(SERVER_IP, &server_addr.sin_addr);
-
-
-
-  	// Connect to server
-  	if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-  		printf("Failed to connect to server : %d\n", errno);
-  		close(sock);
-  		vTaskDelete(NULL);
-
-  		return;
-  	}
-
-  	printf("Connected to server\n");
-
-  	// Send data to server
-  	if (send(sock, message, strlen(message), 0) < 0) {
-  		printf("Failed to send data\n");
-  		close(sock);
-  		vTaskDelete(NULL);
-  		return;
-  	}
-
-  	printf("Data sent successfully\n");
-
-  	// Receive data from server
-  	bytes_received = recv(sock, buffer, sizeof(buffer) - 1, 0);
-  	if (bytes_received > 0) {
-  		buffer[bytes_received] = '\0';  // Null-terminate received data
-  		printf("Received from server: %s\n", buffer);
-  	} else {
-  		printf("Failed to receive data\n");
-  	}
-
-  	// Close socket and clean up
-  	close(sock);
-
-  	vTaskDelete(NULL);  // Delete task after completion
-
-
-
 
   	  /* Infinite loop */
   for(;;)
@@ -322,7 +251,7 @@ void StartTask02(void const * argument)
 	  /* Infinite loop */
 	  for(;;)
 	  {
-		  printf("send %d\n", tx_data[0]);
+		  //printf("send %d\n", tx_data[0]);
 		  tx_data[0] = !tx_data[0];
 
 		  HAL_CAN_AddTxMessage(&hcan1, &tx_header, tx_data, &tx_mailbox_number);

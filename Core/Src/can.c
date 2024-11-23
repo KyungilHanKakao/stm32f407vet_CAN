@@ -69,7 +69,7 @@ void MX_CAN1_Init(void)
       sFilterConfig.SlaveStartFilterBank = 14;
 
 
-      // CAN2?˜ FilterBank?‹œ?‘ ?œ„ì¹?, CAN2ë¥? ?‚¬?š©?•œ?‹¤ë©? FilterBankë¥? SlaveStartFilterBankë³´ë‹¤ ?¬ê²? ?„¤? •?•´?•¼ ?•¨.
+      // CAN2?ï¿½ï¿½ FilterBank?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½?, CAN2ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? FilterBankï¿½? SlaveStartFilterBankë³´ë‹¤ ?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½.
 
       if (HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
       {
@@ -130,7 +130,7 @@ void MX_CAN2_Init(void)
 	sFilterConfig.FilterBank=15;
 
 
-	// CAN2?˜ FilterBank?‹œ?‘ ?œ„ì¹?, CAN2ë¥? ?‚¬?š©?•œ?‹¤ë©? FilterBankë¥? SlaveStartFilterBankë³´ë‹¤ ?¬ê²? ?„¤? •?•´?•¼ ?•¨.
+	// CAN2?ï¿½ï¿½ FilterBank?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½ï¿½?, CAN2ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½? FilterBankï¿½? SlaveStartFilterBankë³´ë‹¤ ?ï¿½ï¿½ï¿½? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ ?ï¿½ï¿½.
 
 	if (HAL_CAN_ConfigFilter(&hcan2, &sFilterConfig) != HAL_OK)
 	{
