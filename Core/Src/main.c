@@ -50,7 +50,7 @@
 #endif
 
 PUTCHAR_PROTOTYPE {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart6, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
     return ch;
 }
 /* USER CODE END PD */

@@ -43,6 +43,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2	;
 /* USER CODE END PD */
@@ -54,7 +55,8 @@ extern CAN_HandleTypeDef hcan2	;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+osThreadId tcpClientTaskHandle;  //tcp client task handle
+extern struct netif gnetif; //extern gnetif
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 osThreadId myTask02Handle;
@@ -62,74 +64,58 @@ osThreadId myTask03Handle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-void tcp_client_task(void *arg) {
+void TcpClientTask(void const *argument){
+	const char *server_ip = "192.168.0.27"; // Server IP
+	const uint16_t server_port = 6000;       // Server Port
+	char message[] = "Hello from STM32\r\n";
+	//char recv_buffer[128];
 
-	int sock;
-	struct sockaddr_in server_addr;
-	char message[] = "Hello from STM32";
-	char buffer[1024];
-	int bytes_received;
-
-
-	// Create socket
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock < 0) {
-		printf("Failed to create socket\n");
-		vTaskDelete(NULL);
-		return;
-	}
-
-	// Set up the server address structure
-	memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(SERVER_PORT);
-	if (!inet_aton(SERVER_IP, &server_addr.sin_addr)) {
-			printf("Invalid IP address\n");
-			lwip_close(sock);
-			return;
+	while (1) {
+		// 1. Create a socket
+		int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+		if (sock < 0) {
+			printf("Socket creation failed\n");
+			vTaskDelay(pdMS_TO_TICKS(1000));
+			continue;
 		}
 
-	// Set up server address
-	//server_addr.sin_family = AF_INET;
-	//server_addr.sin_port = 6000;//htons(SERVER_PORT);
-	//inet_aton(SERVER_IP, &server_addr.sin_addr);
+		// 2. Define server address
+		struct sockaddr_in server_addr;
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(server_port);
+		server_addr.sin_addr.s_addr = inet_addr(server_ip);
 
+		// 3. Connect to the server
+		if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+			printf("Connection failed\n");
+			close(sock);
+			vTaskDelay(pdMS_TO_TICKS(1000));
+			continue;
+		}
 
-	printf("after\n");
-	// Connect to server
-	if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-		printf("Failed to connect to server : %d\n", errno);
+		// 4. Send data to the server
+		if (send(sock, message, strlen(message), 0) < 0) {
+			printf("Send failed\n");
+			close(sock);
+			vTaskDelay(pdMS_TO_TICKS(1000));
+			continue;
+		}
+
+		// 5. Receive data from the server
+//		int len = recv(sock, recv_buffer, sizeof(recv_buffer) - 1, 0);
+//		if (len > 0) {
+//			recv_buffer[len] = '\0';
+//			printf("Received: %s\n", recv_buffer);
+//		} else {
+//			printf("Receive failed\n");
+//		}
+
+		// 6. Close the socket
 		close(sock);
-		vTaskDelete(NULL);
 
-		return;
+		// Delay before next connection attempt
+		vTaskDelay(pdMS_TO_TICKS(5000));
 	}
-
-	printf("Connected to server\n");
-
-	// Send data to server
-	if (send(sock, message, strlen(message), 0) < 0) {
-		printf("Failed to send data\n");
-		close(sock);
-		vTaskDelete(NULL);
-		return;
-	}
-
-	printf("Data sent successfully\n");
-
-	// Receive data from server
-	bytes_received = recv(sock, buffer, sizeof(buffer) - 1, 0);
-	if (bytes_received > 0) {
-		buffer[bytes_received] = '\0';  // Null-terminate received data
-		printf("Received from server: %s\n", buffer);
-	} else {
-		printf("Failed to receive data\n");
-	}
-
-	// Close socket and clean up
-	close(sock);
-
-	vTaskDelete(NULL);  // Delete task after completion
 }
 /* USER CODE END FunctionPrototypes */
 
@@ -213,16 +199,41 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN StartDefaultTask */
-
-  printf("before\n");
-  osDelay(3000);
-  tcp_client_task((void*)argument);
-
-  	  /* Infinite loop */
   for(;;)
-  {
-	  osDelay(1);
-  }
+    {
+  	  //Waiting for valid ip address
+  	  if(gnetif.ip_addr.addr == 0 || gnetif.netmask.addr == 0 || gnetif.gw.addr == 0){
+  		  osDelay(200);
+  		  continue;
+  	  }else{
+  		  printf("\r\nDHCP/Static IP: %s\r\n", ip4addr_ntoa(netif_ip4_addr(&gnetif)));
+  		  break;
+  	  }
+    }
+
+    //Create the task to write to server
+
+    //osDelay(5000);
+    //TcpClientTask((void*)argument);
+    //osThreadDef(tcpClientTask, StartTcpClientTask, osPriorityNormal, 0, 256);
+    osThreadDef(tcpClientTask, TcpClientTask, osPriorityNormal, 0, 256);
+    tcpClientTaskHandle = osThreadCreate(osThread(tcpClientTask), NULL); //run tcp client task
+
+  //  osThreadDef(lwipWriteTask, WriteLWIPClientTask, osPriorityNormal, 0, 2048);
+  //  lwipWriteTaskHandle = osThreadCreate(osThread(lwipWriteTask), NULL);
+
+    //Create the task to read from server
+  //  osThreadDef(lwipReadTask, ReadLWIPClientTask, osPriorityNormal, 0, 2048);
+  //  lwipReadTaskHandle = osThreadCreate(osThread(lwipReadTask), NULL);
+
+
+    /* Infinite loop */
+    for(;;)
+    {
+  	//HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+  	osDelay(500);
+    }
+
   /* USER CODE END StartDefaultTask */
 }
 
